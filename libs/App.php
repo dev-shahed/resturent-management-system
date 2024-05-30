@@ -27,6 +27,44 @@ class App
             echo "Connection failed: " . $e->getMessage();
         }
     }
+
+    // Select all rows matching the query.
+    public function selectAll($query)
+    {
+        $rows = $this->link->prepare($query);
+
+        // Execute the statement.
+        $rows->execute();
+
+        // Fetch all rows as objects.
+        $allRows = $rows->fetchAll(PDO::FETCH_OBJ);
+
+        // Check if rows were found.
+        if ($allRows) {
+            return $allRows;
+        } else {
+            return false;
+        }
+    }
+
+    // Select a single row matching the query.
+    public function selectOne($query)
+    {
+        $row = $this->link->prepare($query);
+
+        // Execute the statement.
+        $row->execute();
+
+        // Fetch the single row as an object.
+        $singleRow = $row->fetch(PDO::FETCH_OBJ);
+
+        // Check if row was found.
+        if ($singleRow) {
+            return $singleRow;
+        } else {
+            return false;
+        }
+    }
 }
 
 $obj = new App;
