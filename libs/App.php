@@ -1,9 +1,7 @@
 <?php
-//require '../config/config.php';
-define("HOST", "127.0.0.1");
-define("DBNAME", "demo");
-define("USER", "root");
-define("PASS", "");
+
+// Adjust the relative path to config.php
+require __DIR__ . "/../config/config.php";
 
 class App
 {
