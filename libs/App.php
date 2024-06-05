@@ -1,7 +1,5 @@
-<?php
-
-// Adjust the relative path to config.php
-require __DIR__ . "/../config/config.php";
+<?php require __DIR__ . "/../config/config.php";
+define('BASE_URL', 'http://localhost:3000');
 
 class App
 {
@@ -65,6 +63,92 @@ class App
             return false;
         }
     }
+    public function insert($query, $arr, $path)
+    {
+        try {
+            if ($this->validate(($arr) == "empty")) {
+                echo "<script>alert('one or more inputs are empty')</script>";
+            }
+            $inset_record = $this->link->prepare($query);
+            $inset_record->execute($arr);
+
+            header("location: " . $path . "");
+        } catch (\Throwable $th) {
+            error_log($th->getMessage());
+        }
+    }
+
+    public function update($query, $arr, $path)
+    {
+        try {
+            if ($this->validate($arr) == "empty") {
+                echo "<script>alert('One or more inputs are empty');</script>";
+                return;
+            }
+
+            $update_record = $this->link->prepare($query);
+            $update_record->execute($arr);
+
+            header("Location: " . $path);
+        } catch (\Throwable $th) {
+            error_log($th->getMessage());
+        }
+    }
+
+    public function delete($query, $arr, $path)
+    {
+        try {
+            $delete_record = $this->link->prepare($query);
+            $delete_record->execute($arr);
+
+            header("Location: " . $path);
+        } catch (\Throwable $th) {
+            error_log($th->getMessage());
+        }
+    }
+
+    //register and login
+    public function register($query, $arr, $path)
+    {
+        try {
+            if ($this->validate($arr) == "empty") {
+                echo "<script>alert('One or more inputs are empty');</script>";
+                return;
+            }
+            $register_user = $this->link->query($query);
+            $register_user->execute($arr);
+
+            header("location: " . $path . "");
+        } catch (\Throwable $th) {
+            error_log($th->getMessage());
+        }
+    }
+
+    public function login($data, $arr, $path)
+    {
+        try {
+            $login_user = $this->link->query($data);
+            $login_user->execute($arr);
+            $fetch = $login_user->fetch(PDO::FETCH_OBJ);
+
+            if ($login_user->rowCount() > 0) {
+                if (password_verify($data("password"), $fetch("password"))) {
+                    //start season..
+                    session_start();
+                    header("location: " . $path . "");
+                }
+            }
+        } catch (\Throwable $th) {
+            error_log($th->getMessage());
+        }
+    }
+
+
+    public function validate($arr)
+    {
+        if (in_array("", $arr)) {
+            echo "empty";
+        }
+    }
 }
 
-$obj = new App;

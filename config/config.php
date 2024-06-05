@@ -1,5 +1,5 @@
 <?php
-define("HOST", "127.0.0.1");
-define("DBNAME", "demo");
+define("HOST", "localhost");
+define("DBNAME", "rmsdb");
 define("USER", "root");
 define("PASS", "");
